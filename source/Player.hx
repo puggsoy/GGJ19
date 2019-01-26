@@ -7,7 +7,8 @@ import flixel.util.FlxColor;
 
 class Player extends FlxSprite 
 {
-	private static inline var walkSpeed:Float = 1;
+	private static inline var walkSpeed:Float = 2.5;
+	private static inline var animSpeed:Int = 12;
 	
 	private var xSpeed:Float = 0;
 	private var ySpeed:Float = 0;
@@ -31,10 +32,10 @@ class Player extends FlxSprite
 		animation.add('idle-down', [4], 0, false);
 		animation.add('idle-left', [8], 0, false);
 		animation.add('idle-right', [8], 0, false, true);
-		animation.add('walk-up', [1, 2, 3, 0], 6, true);
-		animation.add('walk-down', [5, 6, 7, 4], 6, true);
-		animation.add('walk-left', [9, 10, 11, 8], 6, true);
-		animation.add('walk-right', [9, 10, 11, 8], 6, true, true);
+		animation.add('walk-up', [1, 2, 3, 0], animSpeed, true);
+		animation.add('walk-down', [5, 6, 7, 4], animSpeed, true);
+		animation.add('walk-left', [9, 10, 11, 8], animSpeed, true);
+		animation.add('walk-right', [9, 10, 11, 8], animSpeed, true, true);
 		
 		animation.play('idle-down');
 	}
