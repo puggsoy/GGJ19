@@ -1,5 +1,6 @@
 package;
 
+import flixel.group.FlxGroup;
 import flixel.input.FlxPointer;
 import flixel.math.FlxPoint;
 import flixel.system.FlxAssets.FlxGraphicAsset;

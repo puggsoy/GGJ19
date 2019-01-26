@@ -33,6 +33,18 @@ class PlayState extends FlxState
 		
 		FlxG.collide(player, currentRoom.walls);
 		
+		if (FlxG.overlap(player, currentRoom.spikes))
+		{
+			roomNum = 0;
+			player.drop();
+			loadHomeRoom();
+		}
+		
+		if (currentRoom == homeRoom)
+		{
+			FlxG.collide(player, homeRoom.trophies);
+		}
+		
 		if (roomTrophy != null && FlxG.overlap(player, roomTrophy))
 		{
 			player.pickup(roomTrophy);
@@ -99,6 +111,7 @@ class PlayState extends FlxState
 		clear();
 		add(currentRoom.floor);
 		add(currentRoom.walls);
+		add(currentRoom.spikes);
 		
 		player.setPosition(currentRoom.entrance.x, currentRoom.entrance.y);
 		add(player);

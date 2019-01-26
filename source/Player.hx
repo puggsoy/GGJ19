@@ -40,6 +40,10 @@ class Player extends FlxSprite
 		animation.add('walk-right', [9, 10, 11, 8], animSpeed, true, true);
 		
 		animation.play('idle-down');
+		
+		width = width / 2;
+		height = height / 2;
+		offset.set(width / 2, height);
 	}
 	
 	override public function update(elapsed:Float):Void 
@@ -61,7 +65,7 @@ class Player extends FlxSprite
 		
 		if (item != null)
 		{
-			item.setPosition(x, y - item.height + 2);
+			item.setPosition(x - offset.x, y - item.height + 2 - offset.y);
 		}
 	}
 	
@@ -106,7 +110,10 @@ class Player extends FlxSprite
 	
 	public function drop():Trophy
 	{
-		item.drop();
+		if (item != null)
+		{
+			item.drop();
+		}
 		var ret:Trophy = item;
 		item = null;
 		return ret;

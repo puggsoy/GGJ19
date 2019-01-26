@@ -16,6 +16,8 @@ class Trophy extends FlxSprite
 		var num:Int = new FlxRandom().int(0, Math.floor(graphic.width / 16) - 1);
 		animation.add('idle', [num], 0, false);
 		animation.play('idle');
+		
+		immovable = true;
 	}
 	
 	public function carry():Void
