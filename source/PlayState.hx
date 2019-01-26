@@ -8,6 +8,11 @@ class PlayState extends FlxState
 {
 	private var player:Player = null;
 	
+	private static inline var ROOM_NUM:Int = 1;
+	
+	private var homeRoom:HomeRoom = null;
+	private var currentRoom:Room;
+	
 	override public function create():Void
 	{
 		super.create();
@@ -15,21 +20,36 @@ class PlayState extends FlxState
 		FlxG.mouse.useSystemCursor = true;
 		bgColor = FlxColor.BROWN;
 		
-		player = new Player(100, 100);
-		
-		add(player);
-		loadRoom();
+		loadHomeRoom();
 	}
 
 	override public function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
+		
+		FlxG.collide(player, currentRoom.walls);
 	}
 	
-	private function loadRoom():Void
+	private function loadHomeRoom():Void
 	{
-		var room:Room = new Room('lvl0');
+		if (homeRoom == null)
+		{
+			homeRoom = new HomeRoom('home');
+		}
 		
-		add(room.walls);
+		currentRoom = homeRoom;
+		
+		initializeRoom();
+	}
+	
+	private function initializeRoom()
+	{
+		clear();
+		add(currentRoom.floor);
+		add(currentRoom.walls);
+		add(currentRoom.exitDoor);
+		
+		player = new Player(currentRoom.entrance.x, currentRoom.entrance.y);
+		add(player);
 	}
 }

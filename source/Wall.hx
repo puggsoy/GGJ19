@@ -6,14 +6,11 @@ import flixel.util.FlxColor;
 
 class Wall extends FlxSprite 
 {
-	private static inline var ROOM_NUM:Int = 1;
-	
-	private var currentRoom:Room = null;
-	
-	public function new(?X:Float=0, ?Y:Float=0) 
+	public function new(?X:Float=0, ?Y:Float=0, graphic:FlxGraphicAsset) 
 	{
 		super(X, Y);
 		
-		makeGraphic(16, 16, FlxColor.BLACK);
+		loadGraphic(graphic, false);
+		immovable = true;
 	}
 }
