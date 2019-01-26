@@ -18,10 +18,18 @@ class PlayState extends FlxState
 		player = new Player(100, 100);
 		
 		add(player);
+		loadRoom();
 	}
 
 	override public function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
+	}
+	
+	private function loadRoom():Void
+	{
+		var room:Room = new Room('lvl0');
+		
+		add(room.walls);
 	}
 }
