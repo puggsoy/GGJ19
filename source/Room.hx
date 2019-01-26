@@ -13,7 +13,7 @@ class Room
 	private static inline var WALL_COL:Int = 0;
 	private static inline var ENTRANCE_COL:Int = 0x0000ff;
 	private static inline var EXIT_COL:Int = 0x00ff00;
-	private static inline var TREASURE_COL:Int = 0xffff00;
+	private static inline var TROPHY_COL:Int = 0xffff00;
 	
 	private static inline var ROOM_WIDTH:Int = 20;
 	private static inline var ROOM_HEIGHT:Int = 20;
@@ -22,7 +22,6 @@ class Room
 	
 	public var walls(default, null):FlxSpriteGroup = null;
 	public var entrance(default, null):FlxPoint = null;
-	public var exitDoor(default, null):ExitDoor = null;
 	
 	public var floor(default, null):FlxBackdrop = null;
 	
@@ -35,7 +34,7 @@ class Room
 		loadEntrance();
 	}
 	
-	public function loadWalls(wallImg:FlxGraphicAsset)
+	private function loadWalls(wallImg:FlxGraphicAsset):Void
 	{
 		walls = new FlxSpriteGroup();
 		
@@ -52,7 +51,7 @@ class Room
 		}
 	}
 	
-	public function loadEntrance()
+	private function loadEntrance():Void
 	{
 		for (i in 0...(ROOM_WIDTH * ROOM_HEIGHT))
 		{
@@ -62,6 +61,7 @@ class Room
 			if (bmpDat.getPixel(tileX, tileY) == ENTRANCE_COL)
 			{
 				entrance = new FlxPoint(tileX * 16, tileY * 16);
+				break;
 			}
 		}
 	}

@@ -15,6 +15,8 @@ class Player extends FlxSprite
 	
 	private var direction:Direction = DOWN;
 	
+	public var item(default, null):Trophy = null;
+	
 	private var dirStrings:Map<Direction, String> =
 	[
 	UP => 'up',
@@ -56,6 +58,11 @@ class Player extends FlxSprite
 		{
 			animation.play('idle-' + dstring);
 		}
+		
+		if (item != null)
+		{
+			item.setPosition(x, y - item.height + 2);
+		}
 	}
 	
 	private function move():Void
@@ -89,6 +96,20 @@ class Player extends FlxSprite
 		
 		x += xSpeed;
 		y += ySpeed;
+	}
+	
+	public function pickup(trophy:Trophy):Void
+	{
+		item = trophy;
+		item.carry();
+	}
+	
+	public function drop():Trophy
+	{
+		item.drop();
+		var ret:Trophy = item;
+		item = null;
+		return ret;
 	}
 }
 

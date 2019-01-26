@@ -9,12 +9,13 @@ class PlayState extends FlxState
 {
 	private var player:Player = null;
 	
-	private static inline var ROOM_TYPE_AMOUNT:Int = 2;
-	private static inline var NUM_OF_ROOMS:Int = 3;
+	private static inline var ROOM_TYPE_AMOUNT:Int = 12;
+	private static inline var NUM_OF_ROOMS:Int = 1;
 	private var roomNum:Int = 0;
 	
 	private var homeRoom:HomeRoom = null;
-	private var currentRoom:Room;
+	private var currentRoom:Room = null;
+	private var roomTrophy:Trophy = null;
 	
 	override public function create():Void
 	{
@@ -32,18 +33,30 @@ class PlayState extends FlxState
 		
 		FlxG.collide(player, currentRoom.walls);
 		
+		if (roomTrophy != null && FlxG.overlap(player, roomTrophy))
+		{
+			player.pickup(roomTrophy);
+			roomTrophy = null;
+		}
+		
 		if (!player.isOnScreen())
 		{
-			roomNum++;
-			if (roomNum > NUM_OF_ROOMS)
-			{
-				roomNum = 0;
-				loadHomeRoom();
-			}
-			else
-			{
-				loadDungeonRoom();
-			}
+			leaveRoom();
+		}
+	}
+	
+	private function leaveRoom():Void
+	{
+		roomTrophy = null;
+		roomNum++;
+		if (roomNum > NUM_OF_ROOMS)
+		{
+			roomNum = 0;
+			loadHomeRoom();
+		}
+		else
+		{
+			loadDungeonRoom();
 		}
 	}
 	
@@ -52,11 +65,19 @@ class PlayState extends FlxState
 		if (homeRoom == null)
 		{
 			homeRoom = new HomeRoom('home');
+			player = new Player(0, 0);
 		}
 		
 		currentRoom = homeRoom;
 		
 		initializeRoom();
+		
+		if (player.item != null)
+		{
+			homeRoom.placeTrophy(player.drop());
+		}
+		
+		add(homeRoom.trophies);
 	}
 	
 	private function loadDungeonRoom():Void
@@ -68,6 +89,9 @@ class PlayState extends FlxState
 		currentRoom = room;
 		
 		initializeRoom();
+		
+		roomTrophy = room.trophy;
+		add(room.trophy);
 	}
 	
 	private function initializeRoom():Void
@@ -75,9 +99,12 @@ class PlayState extends FlxState
 		clear();
 		add(currentRoom.floor);
 		add(currentRoom.walls);
-		add(currentRoom.exitDoor);
 		
-		player = new Player(currentRoom.entrance.x, currentRoom.entrance.y);
+		player.setPosition(currentRoom.entrance.x, currentRoom.entrance.y);
 		add(player);
+		if (player.item != null)
+		{
+			add(player.item);
+		}
 	}
 }
