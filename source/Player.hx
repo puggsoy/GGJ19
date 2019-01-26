@@ -12,11 +12,31 @@ class Player extends FlxSprite
 	private var xSpeed:Float = 0;
 	private var ySpeed:Float = 0;
 	
+	private var direction:Direction = DOWN;
+	
+	private var dirStrings:Map<Direction, String> =
+	[
+	UP => 'up',
+	DOWN => 'down',
+	LEFT => 'left',
+	RIGHT => 'right'
+	];
+	
 	public function new(?X:Float=0, ?Y:Float=0) 
 	{
 		super(X, Y);
 		
-		makeGraphic(10, 10, FlxColor.CYAN);
+		loadGraphic('assets/images/runner1.png', true, 16, 16);
+		animation.add('idle-up', [0], 0, false);
+		animation.add('idle-down', [4], 0, false);
+		animation.add('idle-left', [8], 0, false);
+		animation.add('idle-right', [8], 0, false, true);
+		animation.add('walk-up', [1, 2, 3, 0], 6, true);
+		animation.add('walk-down', [5, 6, 7, 4], 6, true);
+		animation.add('walk-left', [9, 10, 11, 8], 6, true);
+		animation.add('walk-right', [9, 10, 11, 8], 6, true, true);
+		
+		animation.play('idle-down');
 	}
 	
 	override public function update(elapsed:Float):Void 
@@ -24,6 +44,17 @@ class Player extends FlxSprite
 		super.update(elapsed);
 		
 		move();
+		
+		var dstring:String = dirStrings[direction];
+		
+		if (xSpeed != 0 || ySpeed != 0)
+		{
+			animation.play('walk-' + dstring);
+		}
+		else
+		{
+			animation.play('idle-' + dstring);
+		}
 	}
 	
 	private function move():Void
@@ -34,24 +65,36 @@ class Player extends FlxSprite
 		if (FlxG.keys.pressed.LEFT)
 		{
 			xSpeed = -walkSpeed;
+			direction = LEFT;
 		}
 		else
 		if (FlxG.keys.pressed.RIGHT)
 		{
 			xSpeed = walkSpeed;
+			direction = RIGHT;
 		}
 		
 		if (FlxG.keys.pressed.UP)
 		{
 			ySpeed = -walkSpeed;
+			direction = UP;
 		}
 		else
 		if (FlxG.keys.pressed.DOWN)
 		{
 			ySpeed = walkSpeed;
+			direction = DOWN;
 		}
 		
 		x += xSpeed;
 		y += ySpeed;
 	}
+}
+
+enum Direction
+{
+	UP;
+	DOWN;
+	LEFT;
+	RIGHT;
 }
