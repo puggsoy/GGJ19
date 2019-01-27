@@ -1,4 +1,4 @@
-Congrats you got an item!
+Congratulations on getting an item!
 That's a cool looking item!
 You should get more items.
 Another run, another item.
