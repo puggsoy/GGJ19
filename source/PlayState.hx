@@ -9,9 +9,10 @@ class PlayState extends FlxState
 {
 	private var player:Player = null;
 	
-	private static inline var ROOM_TYPE_AMOUNT:Int = 12;
+	private static inline var ROOM_TYPE_AMOUNT:Int = 16;
 	private static inline var NUM_OF_ROOMS:Int = 1;
 	private var roomNum:Int = 0;
+	private var completedRooms:Array<Int> = null;
 	
 	private var homeRoom:HomeRoom = null;
 	private var currentRoom:Room = null;
@@ -32,17 +33,30 @@ class PlayState extends FlxState
 		super.update(elapsed);
 		
 		FlxG.collide(player, currentRoom.walls);
-		
-		if (FlxG.overlap(player, currentRoom.spikes))
-		{
-			roomNum = 0;
-			player.drop();
-			loadHomeRoom();
-		}
+		FlxG.collide(player, currentRoom.arrowTraps);
 		
 		if (currentRoom == homeRoom)
 		{
 			FlxG.collide(player, homeRoom.trophies);
+		}
+		
+		if (FlxG.overlap(player, currentRoom.spikes))
+		{
+			killPlayer();
+		}
+		
+		for (a in currentRoom.allArrows)
+		{
+			if (!a.isOnScreen())
+			{
+				a.destroy();
+				currentRoom.allArrows.remove(a, true);
+			}
+			else
+			if (FlxG.pixelPerfectOverlap(player, a))
+			{
+				killPlayer();
+			}
 		}
 		
 		if (roomTrophy != null && FlxG.overlap(player, roomTrophy))
@@ -55,6 +69,13 @@ class PlayState extends FlxState
 		{
 			leaveRoom();
 		}
+	}
+	
+	private function killPlayer()
+	{
+		roomNum = 0;
+		player.drop();
+		loadHomeRoom();
 	}
 	
 	private function leaveRoom():Void
@@ -109,9 +130,13 @@ class PlayState extends FlxState
 	private function initializeRoom():Void
 	{
 		clear();
+		if (roomTrophy != null) roomTrophy.destroy();
+		roomTrophy = null;
 		add(currentRoom.floor);
 		add(currentRoom.walls);
 		add(currentRoom.spikes);
+		add(currentRoom.arrowTraps);
+		add(currentRoom.allArrows);
 		
 		player.setPosition(currentRoom.entrance.x, currentRoom.entrance.y);
 		add(player);

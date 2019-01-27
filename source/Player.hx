@@ -7,7 +7,7 @@ import flixel.util.FlxColor;
 
 class Player extends FlxSprite 
 {
-	private static inline var walkSpeed:Float = 2.5;
+	private static inline var walkSpeed:Float = 1.7;
 	private static inline var animSpeed:Int = 12;
 	
 	private var xSpeed:Float = 0;
@@ -19,10 +19,11 @@ class Player extends FlxSprite
 	
 	private var dirStrings:Map<Direction, String> =
 	[
-	UP => 'up',
-	DOWN => 'down',
-	LEFT => 'left',
-	RIGHT => 'right'
+	Direction.UP => 'up',
+	Direction.DOWN => 'down',
+	Direction.LEFT => 'left',
+	Direction.RIGHT => 'right',
+	Direction.NONE => 'error'
 	];
 	
 	public function new(?X:Float=0, ?Y:Float=0) 
@@ -42,8 +43,8 @@ class Player extends FlxSprite
 		animation.play('idle-down');
 		
 		width = width / 2;
-		height = height / 2;
-		offset.set(width / 2, height);
+		height = 6;
+		offset.set(width / 2, 10);
 	}
 	
 	override public function update(elapsed:Float):Void 
@@ -118,12 +119,4 @@ class Player extends FlxSprite
 		item = null;
 		return ret;
 	}
-}
-
-enum Direction
-{
-	UP;
-	DOWN;
-	LEFT;
-	RIGHT;
 }
