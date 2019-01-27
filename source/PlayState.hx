@@ -2,8 +2,13 @@ package;
 
 import flixel.FlxG;
 import flixel.FlxState;
+import flixel.graphics.frames.FlxBitmapFont;
 import flixel.math.FlxRandom;
+import flixel.system.FlxAssets;
+import flixel.text.FlxText;
 import flixel.util.FlxColor;
+import lime.text.Font;
+import openfl.Assets;
 
 class PlayState extends FlxState
 {
@@ -18,6 +23,9 @@ class PlayState extends FlxState
 	private var currentRoom:Room = null;
 	private var roomTrophy:Trophy = null;
 	
+	private var title1:FlxText = null;
+	private var title2:FlxText = null;
+	
 	override public function create():Void
 	{
 		super.create();
@@ -25,7 +33,21 @@ class PlayState extends FlxState
 		FlxG.mouse.useSystemCursor = true;
 		bgColor = FlxColor.BROWN;
 		
+		var font:Font = Assets.getFont('assets/fonts/FFFFORWA.TTF');
+		title1 = new FlxText(0, 80, FlxG.width, 'DUNGEON');
+		title1.setFormat('FFF Forward', 36, 0xFFbcccdc, FlxTextAlign.CENTER);
+		
+		title2 = new FlxText(0, 200, FlxG.width, 'HOARDER');
+		title2.setFormat('FFF Forward', 36, 0xFFbcccdc, FlxTextAlign.CENTER);
+		
 		loadHomeRoom();
+		
+		add(title1);
+		add(title2);
+		
+		//sound
+		FlxG.sound.playMusic('assets/sounds/Dungeon Music.ogg');
+		FlxG.sound.play('assets/sounds/Welcome.mp3');
 	}
 	
 	override public function update(elapsed:Float):Void
