@@ -26,6 +26,8 @@ class PlayState extends FlxState
 	private var title1:FlxText = null;
 	private var title2:FlxText = null;
 	
+	private var dotext:Bool = false;
+	
 	override public function create():Void
 	{
 		super.create();
@@ -47,7 +49,7 @@ class PlayState extends FlxState
 		
 		//sound
 		FlxG.sound.playMusic('assets/sounds/Dungeon Music.ogg');
-		FlxG.sound.play('assets/sounds/Welcome.mp3');
+		FlxG.sound.play('assets/sounds/Welcome.wav');
 	}
 	
 	override public function update(elapsed:Float):Void
@@ -95,6 +97,7 @@ class PlayState extends FlxState
 	
 	private function killPlayer()
 	{
+		FlxG.sound.play('assets/sounds/Death.wav');
 		roomNum = 0;
 		player.drop();
 		loadHomeRoom();
@@ -102,6 +105,7 @@ class PlayState extends FlxState
 	
 	private function leaveRoom():Void
 	{
+		dotext = true;
 		roomTrophy = null;
 		roomNum++;
 		if (roomNum > NUM_OF_ROOMS)
@@ -127,12 +131,25 @@ class PlayState extends FlxState
 		
 		initializeRoom();
 		
+		var newItem:Bool = false;
 		if (player.item != null)
 		{
 			homeRoom.placeTrophy(player.drop());
+			newItem = true;
 		}
 		
 		add(homeRoom.trophies);
+		
+		if (dotext && newItem)
+		{
+			var alltext:Array<String> = Assets.getText('assets/data/Home Room Lines.txt').split('\r\n');
+			var towrite:String = alltext[homeRoom.trophies.length - 1];
+			
+			var font:Font = Assets.getFont('assets/fonts/FFFFORWA.TTF');
+			var t = new FlxText(0, FlxG.height - 50, FlxG.width, towrite);
+			t.setFormat('FFF Forward', 12, 0xFFbcccdc, FlxTextAlign.CENTER);
+			add(t);
+		}
 	}
 	
 	private function loadDungeonRoom():Void
